@@ -10,7 +10,7 @@ class TripsContainer extends Component {
 	};
 
 		componentDidMount() {
-			axios.get('http://localhost:3001/api/v1/lists.json')
+			axios.get('http://localhost:3001/api/v1/trips.json')
 				.then(response => {
 					console.log(response)
 					this.setState({
@@ -21,9 +21,26 @@ class TripsContainer extends Component {
 		};
 
 	render() {
+		var tripsInSearch = this.state.trips.filter(trip => trip.passed === false);
+		var tripsPassed = this.state.trips.filter(trip => trip.passed === true);
 		return (
 			<div className="Trips-container">
-				trips
+				<p>in search</p>
+				{tripsInSearch.map( trip => {
+					return (
+						<div className="single-trip" key={trip.id}>
+							<h4>{trip.departure_station} - {trip.arrival_station}</h4>
+						</div>
+					);
+				})}
+				<p>passed</p>
+				{tripsPassed.map( trip => {
+					return (
+						<div className="single-trip" key={trip.id}>
+							<h4>{trip.departure_station} - {trip.arrival_station}</h4>
+						</div>
+					);
+				})}
 			</div>
 		)
 	}
