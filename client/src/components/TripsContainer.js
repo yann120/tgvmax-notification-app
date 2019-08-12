@@ -2,25 +2,22 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import MaterialTable from 'material-table';
 import Select from 'react-select';
+import Papa from 'papaparse';
 
-const options = [
-  { value: 'Paris', label: 'Paris' },
-  { value: 'Nice', label: 'Nice' },
-  { value: 'Toulouse', label: 'Toulouse' },
-]
 
 class TripsContainer extends Component {
 	constructor(props) {
-		super(props);
+    super(props);
+    this.updateData = this.updateData.bind(this);
 		this.state = {
+      stations: [],
 			columns: [
         { title: "Departure", field: "departure_station",
         editComponent: props => (
-          // console.log("props value" + props.value);
           <Select
             value={{label: props.value, value: props.value}}
             onChange={e => props.onChange(e.value)}
-            options={options}
+            options={this.state.stations}
           />
         ) },
 				{ title: "Arrival", field: "arrival_station" },
@@ -48,12 +45,29 @@ class TripsContainer extends Component {
 				})
 				
 			})
-			.catch(error => console.log(error))
+      .catch(error => console.log(error))
+    var csvFilePath = require("../stations.csv");
+    Papa.parse(csvFilePath, {
+      header: false,
+      download: true,
+      skipEmptyLines: true,
+      // Here this is also available. So we can call our custom class method
+      complete: this.updateData
+    });
+
 	};
 
+  updateData(result) {
+    const stations = [];
+    result.data.forEach(station => {
+      stations.push({value: station[1], label: station[1]})
+    })
+
+    // Here this is available and we can call this.setState (since it's binded in the constructor)
+    this.setState({ stations: stations }); // or shorter ES syntax: this.setState({ data });
+  }
 
 	render() {
-    const { selectedOption } = this.state;
 		return(
 		<MaterialTable
       title="Trains"

@@ -13,6 +13,7 @@
     "lodash": "^4.17.15",
     "lodash.template": "^4.5.0",
     "material-table": "^1.42.0",
+    "papaparse": "^5.0.1",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.10",
     "react-datepicker": "^2.8.0",
